@@ -5,34 +5,21 @@ import streamlit as st
 from typing import Tuple, List, Union, Generator
 
 
-COUNTRIES = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia',
-                 'Australia', 'Austria', 'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
-                 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria',
-                 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic', 'Chad',
-                 'Chile', 'China', 'Colombia', 'Comoros', 'Democratic Republic of the Congo', 'Republic of the Congo',
-                 'Costa Rica', 'Côte d’Ivoire', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica',
-                 'Dominican Republic', 'East Timor (Timor-Leste)', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea',
-                 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon', 'The Gambia', 'Georgia',
-                 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras',
-                 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan',
-                 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'North Korea', 'South Korea', 'Kosovo', 'Kuwait', 'Kyrgyzstan',
-                 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
-                 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius',
-                 'Mexico', 'Micronesia, Federated States of', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco',
-                 'Mozambique', 'Myanmar (Burma)', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
-                 'Niger', 'Nigeria', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea',
-                 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda',
-                 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino',
-                 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore',
-                 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'Spain', 'Sri Lanka', 'Sudan',
-                 'Sudan, South', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand',
-                 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine',
-                 'United Arab Emirates', 'England', 'Wales', 'Scotland', 'Ireland', 'United States', 'Uruguay', 'Uzbekistan',
-                 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe']
-SCHENGEN_COUNTRIES = ['Austria', 'Belgium', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany',
-                          'Greece', 'Hungary', 'Iceland', 'Italy', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg',
-                          'Malta', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Slovakia', 'Slovenia', 'Spain',
-                      'Sweden', 'Switzerland']
+COUNTRIES = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
+             'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada',
+             'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Democratic Republic of the Congo', 'Republic of the Congo', 'Costa Rica', 'Côte d’Ivoire', 'Croatia', 'Cuba', 'Cyprus',
+             'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor (Timor-Leste)', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia',
+             'Fiji', 'Finland', 'France', 'Gabon', 'The Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India',
+             'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'North Korea', 'South Korea', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia',
+             'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico',
+             'Micronesia, Federated States of', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar (Burma)', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger',
+             'Nigeria', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda',
+             'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore',
+             'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'Spain', 'Sri Lanka', 'Sudan', 'Sudan, South', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand',
+             'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'England', 'Wales', 'Scotland', 'Ireland', 'United States', 'Uruguay',
+             'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe']
+SCHENGEN_COUNTRIES = ['Austria', 'Belgium', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Italy', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Malta',
+                      'Netherlands', 'Norway', 'Poland', 'Portugal', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland']
 
 
 class Trip:
@@ -42,6 +29,7 @@ class Trip:
         self.entry_date: date = entry_date
         self.exit_date: date = exit_date
         # to calculate
+        self.type: str = self.get_type()
         self.days: int = self.get_duration()
         self.limit_date = 0
         self.days_left = 0
@@ -53,6 +41,10 @@ class Trip:
 
     def __str__(self):
         return f"{self.country.title()} ({self.entry_date} to {self.exit_date})"
+
+    def get_type(self):
+        trip_type = 'Schengen' if self.country in SCHENGEN_COUNTRIES else 'Other'
+        return trip_type
 
     def get_duration(self):
         difference_dates = self.exit_date - self.entry_date
@@ -75,7 +67,6 @@ class Trip:
             # Count days between dates
             days_count = [exit_d - sooner_d for exit_d, sooner_d in sooner_date]
             self.entry_eval_days = sum([dates.days + 1 for dates in days_count])
-            print(self.entry_eval_days)
         else:
             pass
 
@@ -89,7 +80,6 @@ class Trip:
             # Count days between dates
             days_count = (exit_d - sooner_d for exit_d, sooner_d in sooner_date)
             self.exit_eval_days = sum((dates.days + 1 for dates in days_count))
-            print(self.exit_eval_days)
         else:
             pass
 
@@ -101,8 +91,8 @@ class Trip:
 
 class TravelHistory:
     def __init__(self):
-        self.trips = []
-        self.last_trip = None
+        self.trips: list = []
+        self.last_trip: Trip = None
 
     def add_trip(self, trip: Trip):
         self.last_trip = trip
@@ -111,10 +101,11 @@ class TravelHistory:
         self.validation()
 
     def validation(self):
-        if self.last_trip.country in SCHENGEN_COUNTRIES:
-            self.schengen_validation()
-        else:
+        val_functions = {'Schengen': self.schengen_validation}
+        if self.last_trip.type == 'Other':
             pass
+        else:
+            val_functions[self.last_trip.type]()
 
     def schengen_validation(self):
         # Selection of schengen trips
@@ -130,19 +121,36 @@ class TravelHistory:
                 # Other
                 trip.update_days_count()
 
-    def to_df(self):
+    def to_df(self) -> pd.DataFrame:
         records_aux = [{
-            'Country': t.country,
-            'Entry Date': t.entry_date,
-            'Exit Date': t.exit_date,
-            '# Days': t.days,
-            'Limit Date': t.limit_date,
-            'Days Left': t.days_left,
-            'Entry Eval Date': t.entry_eval_date,
-            'Entry Eval # Days': t.entry_eval_days,
-            'Exit Eval Date': t.exit_eval_date,
-            'Exit Eval # Days': t.exit_eval_days,
-            'Renew Date': t.renew_date
+            'type': t.type,
+            'country': t.country,
+            'entry_date': t.entry_date,
+            'exit_date': t.exit_date,
+            'days': t.days,
+            'limit_date': t.limit_date,
+            'days_left': t.days_left,
+            'entry_eval_date': t.entry_eval_date,
+            'entry_eval_days': t.entry_eval_days,
+            'exit_eval_date': t.exit_eval_date,
+            'exit_eval_days': t.exit_eval_days,
+            'renew_date': t.renew_date
         } for t in self.trips]
 
         return pd.DataFrame.from_records(records_aux)
+
+    def update_trips(self, edited_trips: pd.DataFrame):
+        # Check for differences
+        cols_to_compare = ['country', 'entry_date', 'exit_date']
+        diff_idx = list(self.to_df()[0][cols_to_compare].compare(edited_trips.loc[:, edited_trips.columns != 'remove'][cols_to_compare], result_names=("current", "edited"), keep_equal=True).index)
+
+        # Add edited trips
+        for idx in diff_idx:
+            new_trip = Trip(edited_trips.iloc[idx]['country'], edited_trips.iloc[idx]['entry_date'], edited_trips.iloc[idx]['exit_date'])
+            self.add_trip(new_trip)
+
+        # Remove selected trips
+        for idx in list(edited_trips[edited_trips['remove'] == True].index):
+            self.trips.pop(idx)
+
+
