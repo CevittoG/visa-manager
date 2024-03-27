@@ -1,6 +1,7 @@
 import random
 import streamlit as st
 import numpy as np
+import pandas as pd
 
 
 def show_GIF(gif_type: str, st_structure=st, msg: str = None):

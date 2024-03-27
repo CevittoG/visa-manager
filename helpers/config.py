@@ -117,6 +117,7 @@ class TravelHistory:
             # Evaluation Visa Dates (180 days before each event)
             trip.get_entry_eval_date(180)
             trip.get_exit_eval_date(180)
+            # Compare with other Schengen trips
             if len(schengen_trips) > 0:
                 # Days in Schengen zone before eval dates
                 trip.get_entry_eval_days(schengen_trips)
@@ -146,18 +147,27 @@ class TravelHistory:
 
         return pd.DataFrame.from_records(records_aux)
 
-    def update_trips(self, edited_trips: pd.DataFrame):
+    def update_trips(self, edited_trips: pd.DataFrame) -> list:
         # Check for differences
         cols_to_compare = ['country', 'entry_date', 'exit_date']
-        diff_idx = list(self.to_df()[0][cols_to_compare].compare(edited_trips.loc[:, edited_trips.columns != 'remove'][cols_to_compare], result_names=("current", "edited"), keep_equal=True).index)
+        current_df = self.to_df()[cols_to_compare]
+        edited_df = edited_trips.loc[:, edited_trips.columns != 'remove'][cols_to_compare]
+        diff_idx = list(current_df.compare(edited_df, result_names=("current", "edited"), keep_equal=True).index)
+
+        changes = []
 
         # Add edited trips
         for idx in diff_idx:
             new_trip = Trip(edited_trips.iloc[idx]['country'], edited_trips.iloc[idx]['entry_date'], edited_trips.iloc[idx]['exit_date'])
+            changes.append((f"{new_trip}", '✏️'))
             self.add_trip(new_trip)
 
         # Remove selected trips
         for idx in list(edited_trips[edited_trips['remove'] == True].index):
+            changes.append((f"{self.trips[idx]}", '🗑️'))
             self.trips.pop(idx)
+
+        # list of changes to print
+        return changes
 
 
