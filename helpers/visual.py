@@ -53,6 +53,12 @@ def highlight_with_function(value, function, bgcolor="#f9aeae", color="black"):
         return ""
 
 
+def highlight_invalid_trip(s, bgcolor="#f9aeae", color="black"):
+    is_invalid = pd.Series(data=False, index=s.index)
+    is_invalid['is_valid'] = s.loc['is_valid'] is False
+    return [f'background-color: {bgcolor}; color: {color};' if is_invalid.any() else '' for v in is_invalid]
+
+
 def highlight_missing_values(value, bgcolor="#f9aeae", color="black"):
     if type(value) == type("") and value == "":
         return f'background-color: {bgcolor}; color: {color};'

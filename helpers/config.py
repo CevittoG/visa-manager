@@ -1,8 +1,6 @@
 import operator
 import pandas as pd
 from datetime import date, datetime, timedelta
-import streamlit as st
-from typing import Tuple, List, Union, Generator
 
 
 COUNTRIES = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
@@ -38,6 +36,8 @@ class Trip:
         self.exit_eval_date: date = None
         self.exit_eval_days: int = 0
         self.renew_date: date = 0
+        # after validation
+        self.valid = True
 
     def __str__(self):
         return f"{self.country.title()} ({self.entry_date} to {self.exit_date})"
@@ -88,6 +88,9 @@ class Trip:
         self.limit_date = self.exit_date + timedelta(days=self.days_left)
         self.renew_date = self.entry_date + timedelta(days=180)
 
+    def validate(self, value: bool):
+        self.valid = value
+
 
 class TravelHistory:
     def __init__(self):
@@ -120,6 +123,9 @@ class TravelHistory:
                 trip.get_exit_eval_days(schengen_trips)
                 # Other
                 trip.update_days_count()
+            # Validate trip
+            is_valid = (trip.days <= 30) & (trip.days_left >= 0) & (trip.entry_eval_days <= 90) & (trip.exit_eval_days <= 90)
+            trip.validate(is_valid)
 
     def to_df(self) -> pd.DataFrame:
         records_aux = [{
@@ -134,7 +140,8 @@ class TravelHistory:
             'entry_eval_days': t.entry_eval_days,
             'exit_eval_date': t.exit_eval_date,
             'exit_eval_days': t.exit_eval_days,
-            'renew_date': t.renew_date
+            'renew_date': t.renew_date,
+            'is_valid': t.valid
         } for t in self.trips]
 
         return pd.DataFrame.from_records(records_aux)
