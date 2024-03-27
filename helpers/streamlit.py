@@ -2,7 +2,7 @@ import streamlit as st
 import re
 from helpers import COUNTRIES
 
-DATE_FORMAT = "MM-DD-YY"
+DATE_FORMAT = "MM-DD-YYYY"
 TH_DF_CONFIG = {
     'type': st.column_config.TextColumn('Type', disabled=True),
     'country': st.column_config.SelectboxColumn('Country', options=COUNTRIES, required=True),

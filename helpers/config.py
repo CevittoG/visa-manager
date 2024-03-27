@@ -40,7 +40,7 @@ class Trip:
         self.valid = True
 
     def __str__(self):
-        return f"{self.country.title()} ({self.entry_date} to {self.exit_date})"
+        return f"{self.country.title()} ({self.entry_date.strftime('%m-%d-%Y')} to {self.exit_date.strftime('%m-%d-%Y')})"
 
     def get_type(self):
         trip_type = 'Schengen' if self.country in SCHENGEN_COUNTRIES else 'Other'
