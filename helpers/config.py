@@ -142,7 +142,7 @@ class TravelHistory:
             'exit_eval_date': t.exit_eval_date,
             'exit_eval_days': t.exit_eval_days,
             'renew_date': t.renew_date,
-            'is_valid': t.valid
+            'is_valid': t.valid,
         } for t in self.trips]
 
         return pd.DataFrame.from_records(records_aux)

@@ -24,8 +24,8 @@ def main():
     if not trips_df.empty:
         # Mark with red all invalid trips
         trips_df = trips_df.style.apply(highlight_invalid_trip, axis=1)
-        trips_df = trips_df.hide(['is_valid'], axis=1)
-        st.dataframe(trips_df, column_config=TH_DF_CONFIG)
+        columns_to_show = ['type', 'country', 'entry_date', 'exit_date', 'days', 'limit_date', 'days_left', 'entry_eval_date', 'entry_eval_days', 'exit_eval_date', 'exit_eval_days', 'renew_date']
+        st.dataframe(trips_df, column_config=TH_DF_CONFIG, column_order=columns_to_show)
 
 
 if __name__ == "__main__":

@@ -16,7 +16,8 @@ TH_DF_CONFIG = {
     'exit_eval_date': st.column_config.DateColumn('Exit Eval Date', format=DATE_FORMAT, disabled=True),
     'exit_eval_days': st.column_config.NumberColumn('Exit Eval # Days', disabled=True),
     'renew_date': st.column_config.DateColumn('Renew Date', format=DATE_FORMAT, disabled=True),
-    'remove': st.column_config.CheckboxColumn('Remove Trip', required=True)
+    'remove': st.column_config.CheckboxColumn('Remove Trip', required=True),
+    'is_valid': st.column_config.CheckboxColumn('Valid', disabled=True)
 }
 
 

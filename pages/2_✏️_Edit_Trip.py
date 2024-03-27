@@ -1,5 +1,6 @@
 from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
 from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT
+from helpers.visual import highlight_invalid_trip
 import streamlit as st
 import os
 
@@ -10,9 +11,11 @@ def main():
     trips_df = st.session_state['TravelHistory'].to_df()
     if not trips_df.empty:
         trips_df = st.session_state['TravelHistory'].to_df()
-        trips_df = trips_df[['type', 'country', 'entry_date', 'exit_date', 'days', 'limit_date', 'days_left']]
         trips_df['remove'] = False
-        edited_trips_df = st.data_editor(trips_df, column_config=TH_DF_CONFIG)
+        # Mark with red all invalid trips
+        trips_df = trips_df.style.apply(highlight_invalid_trip, axis=1)
+        columns_to_show = ['type', 'country', 'entry_date', 'exit_date', 'days', 'limit_date', 'days_left', 'remove']
+        edited_trips_df = st.data_editor(trips_df, column_config=TH_DF_CONFIG, column_order=columns_to_show)
 
         if st.button('Save changes', type='primary'):
             messages = st.session_state['TravelHistory'].update_trips(edited_trips_df)
