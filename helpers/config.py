@@ -163,7 +163,9 @@ class TravelHistory:
             self.add_trip(new_trip)
 
         # Remove selected trips
-        for idx in list(edited_trips[edited_trips['remove'] == True].index):
+        idx_to_remove = list(edited_trips[edited_trips['remove'] == True].index)
+        idx_to_remove.reverse()
+        for idx in idx_to_remove:
             changes.append((f"{self.trips[idx]}", '🗑️'))
             self.trips.pop(idx)
 
