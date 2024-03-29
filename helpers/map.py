@@ -74,16 +74,6 @@ def display_map(trips_df: pd.DataFrame) -> str:
         highlight=True)
     choropleth.geojson.add_to(f_map)
 
-    # Get days and dates
-    # for country in choropleth.geojson.data['features']:
-    #     country_name = country['properties']['ADMIN']
-    #     # ToDo: Check if all countries existe in geojson file
-    #     trips_data_collection = [f"Trip {idx}: {row['entry_date']} to {row['exit_date']} ({row['days']} days)" if not row.empty
-    #                              else ['']
-    #                              for idx, row in trips_df.loc[trips_df['country'] == country_name].iterrows()]
-    #     trips_data = '\n\n- '.join(trips_data_collection)
-    #     country['properties']['trips'] = trips_data
-
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(['ADMIN'],  #, 'trips'],
                                        labels=False)

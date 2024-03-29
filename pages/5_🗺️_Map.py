@@ -11,11 +11,15 @@ def main():
 
     trips_df = st.session_state['TravelHistory'].to_df()
     if not trips_df.empty:
-        columns_to_show = ['type', 'country', 'entry_date', 'exit_date', 'days']
-        trips_df = trips_df[columns_to_show]
+        columns_to_show = ['country', 'entry_date', 'exit_date', 'days']
         # Get map
-        clicked_country = display_map(trips_df)
-        st.write(clicked_country)
+        clicked_country = display_map(trips_df[columns_to_show])
+        if clicked_country != '':
+            st.markdown(f'## {clicked_country}')
+            # ToDo: Show trips data
+            for idx, row in trips_df.loc[trips_df['country'] == clicked_country].iterrows():
+                if not row.empty:
+                    st.markdown(f"### #{idx}\n\n{row['entry_date']} to {row['exit_date']} - {row['days']} days")
     else:
         st.warning('There is no data to export. Click one of the following buttons to add data.')
         st.page_link("pages/1_➕_Add_Trip.py", label="Add Trip", icon="➕")
