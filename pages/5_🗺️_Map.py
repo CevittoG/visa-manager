@@ -14,7 +14,8 @@ def main():
         columns_to_show = ['type', 'country', 'entry_date', 'exit_date', 'days']
         trips_df = trips_df[columns_to_show]
         # Get map
-        display_map(trips_df)
+        clicked_country = display_map(trips_df)
+        st.write(clicked_country)
     else:
         st.warning('There is no data to export. Click one of the following buttons to add data.')
         st.page_link("pages/1_➕_Add_Trip.py", label="Add Trip", icon="➕")
