@@ -1,6 +1,8 @@
 import streamlit as st
 import re
+import supabase
 from helpers import COUNTRIES
+from helpers.database import db_select
 
 DATE_FORMAT = "MM-DD-YYYY"
 TH_DF_CONFIG = {
@@ -30,13 +32,6 @@ def page_recognition(file_path: str, regex=r'^\d+_([^\w\s,]+)_(.+?)\.py$'):
 
 
 def add_logo(logo_url: str, height: int = 120):
-    """Add a logo (from logo_url) on the top of the navigation page of a multipage app.
-    Taken from https://discuss.streamlit.io/t/put-logo-and-title-above-on-top-of-page-navigation-in-sidebar-of-multipage-app/28213/6
-    The url can either be a url to the image, or a local path to the image.
-    Args:
-        logo_url (str): URL/local path of the logo
-    """
-
     logo = f"url({logo_url})"
     # else:
     #     logo = f"url(data:image/png;base64,{base64.b64encode(Path(logo_url).read_bytes()).decode()})"
@@ -82,3 +77,28 @@ def shared_page_config(title="", image="", initial_sidebar_state="expanded", emo
         st.caption(page_caption)
 
     return
+
+
+def side_bar_user_login(db_conn: supabase.Client):
+    # Check if users as logged in
+    if not st.session_state['LOGGED_IN']:
+        st.sidebar.markdown('## Login')
+        user = st.sidebar.text_input(label='Username', placeholder="Username", key="username", autocomplete='on', label_visibility='collapsed')
+        pswd = st.sidebar.text_input(label='Password', placeholder="Password", key="password", type="password", autocomplete="on", label_visibility='collapsed')
+
+        if st.sidebar.button('Login', type='primary', disabled=user is None and pswd is None):
+            select_response = db_select(db_conn, 'users', ['id', 'username', 'password'], ('username', 'eq', str(user)))
+            # Check for query error
+            if isinstance(select_response, str):
+                st.error('Unknown error, please refresh the page and try again. If this keeps happening please wait a few minutes, the services might be down.')
+            # Check if user exists
+            elif len(select_response.data) == 0:
+                st.sidebar.warning("Username doesn't exist, please create an user on main page")
+            # Check password
+            elif pswd == str(select_response.data[0]['password']):
+                st.session_state['LOGGED_IN'] = True
+                st.session_state['SESSION_USERNAME'] = user
+
+    else:
+        st.sidebar.markdown(f"## Welcome {st.session_state['SESSION_USERNAME']}!")
+

@@ -57,6 +57,11 @@ if __name__ == "__main__":
     shared_page_config(title='Visa Manager',
                        page_caption='', )
 
+    if 'LOGGED_IN' not in st.session_state:
+        st.session_state['LOGGED_IN'] = False
+    if 'SESSION_USERNAME' not in st.session_state:
+        st.session_state['SESSION_USERNAME'] = ''
+
     # Initiate database connection
     db_conn = db_init_conn()
     # Sidebar
