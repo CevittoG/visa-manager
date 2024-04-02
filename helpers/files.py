@@ -1,6 +1,6 @@
 import pandas as pd
 from typing import List, Tuple, Union
-from helpers.config import COUNTRIES
+from helpers.map import COUNTRIES
 
 
 def csv_to_list(trips_df: pd.DataFrame) -> Union[List[Tuple], str]:
