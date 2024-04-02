@@ -1,6 +1,6 @@
 from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
-from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT
-from helpers.visual import highlight_invalid_trip
+from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT, sidebar_user_info
+from helpers.database import db_init_conn
 from helpers.map import display_map
 import streamlit as st
 import os
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     PAGE_EMOJI, PAGE_KEYWORD = page_recognition(os.path.basename(__file__))
 
     # Start with page content
-    page_caption = ("Missing description...")
+    page_caption = ("Missing description...")  # ToDo: Missing description
     shared_page_config(title=PAGE_KEYWORD.replace('_', ' ').title(),
                        emoji=PAGE_EMOJI,
                        page_caption=page_caption,
@@ -39,6 +39,15 @@ if __name__ == "__main__":
 
     if 'TravelHistory' not in st.session_state:
         st.session_state['TravelHistory'] = TravelHistory()
+    if 'LOGGED_IN' not in st.session_state:
+        st.session_state['LOGGED_IN'] = False
+    if 'SESSION_USER' not in st.session_state:
+        st.session_state['SESSION_USER'] = ''
+
+    # Initiate database connection
+    db_conn = db_init_conn()
+    # Sidebar
+    sidebar_user_info(db_conn)
 
     # Page functionality
     main()

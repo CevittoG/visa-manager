@@ -47,22 +47,7 @@ def main():
                 st.download_button(label="Download TravelHistory", data=travel_history_data, file_name=f'TravelHistory_{today}.csv', mime='text/csv')
 
         elif export_type == 'Login':
-            st.info("I'm sorry! I haven't implemented this yet.")
-            c1, c2, c3 = st.columns([2, 2, 1])
-
-            user = c1.text_input(label='Email', placeholder="Email", key="user", autocomplete="email", label_visibility='collapsed')
-            pswd = c2.text_input(label='Password', placeholder="Password", key="password", type="password", autocomplete="on", label_visibility='collapsed')
-            if c3.button('Login', type='primary'):
-                pass
-
-            st.write('')
-            st.write('')
-            st.write('')
-            remember_me = st.checkbox("Remember me")
-            if remember_me:
-                html = """<iframe id="ytplayer" type="text/html" width="560" height="315" src="https://www.youtube.com/embed/KP_XkN2v7OM?autoplay=1&si=ldybZWdUGotYXS9z&amp;controls=0&amp;start=1" allow="autoplay" frameborder="0"></iframe>"""
-                st.components.v1.html(html, width=580, height=335, scrolling=False)
-                st.info("I'm sorry! I haven't implemented sessions yet.")
+            pass
 
 
 if __name__ == "__main__":

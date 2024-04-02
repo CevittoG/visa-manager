@@ -1,5 +1,5 @@
 from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
-from helpers.streamlit import page_recognition, shared_page_config, side_bar_user_login, TH_DF_CONFIG, DATE_FORMAT
+from helpers.streamlit import page_recognition, shared_page_config, sidebar_user_info, TH_DF_CONFIG, DATE_FORMAT
 from helpers.visual import highlight_invalid_trip
 from helpers.database import db_init_conn
 import streamlit as st
@@ -43,13 +43,13 @@ if __name__ == "__main__":
         st.session_state['TravelHistory'] = TravelHistory()
     if 'LOGGED_IN' not in st.session_state:
         st.session_state['LOGGED_IN'] = False
-    if 'SESSION_USERNAME' not in st.session_state:
-        st.session_state['SESSION_USERNAME'] = ''
+    if 'SESSION_USER' not in st.session_state:
+        st.session_state['SESSION_USER'] = ''
 
     # Initiate database connection
     db_conn = db_init_conn()
     # Sidebar
-    side_bar_user_login(db_conn)
+    sidebar_user_info(db_conn)
 
     # Page functionality
     main()

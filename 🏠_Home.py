@@ -1,6 +1,7 @@
 import streamlit as st
-from helpers.streamlit import page_recognition, shared_page_config, side_bar_user_login
-from helpers.database import db_init_conn, db_insert
+from helpers.streamlit import shared_page_config, sidebar_user_info, user_login
+from helpers.database import db_init_conn, user_sing_up
+from helpers import TravelHistory
 import os
 
 
@@ -57,15 +58,17 @@ if __name__ == "__main__":
     shared_page_config(title='Visa Manager',
                        page_caption='', )
 
+    if 'TravelHistory' not in st.session_state:
+        st.session_state['TravelHistory'] = TravelHistory()
     if 'LOGGED_IN' not in st.session_state:
         st.session_state['LOGGED_IN'] = False
-    if 'SESSION_USERNAME' not in st.session_state:
-        st.session_state['SESSION_USERNAME'] = ''
+    if 'SESSION_USER' not in st.session_state:
+        st.session_state['SESSION_USER'] = ''
 
     # Initiate database connection
     db_conn = db_init_conn()
     # Sidebar
-    side_bar_user_login(db_conn)
+    sidebar_user_info(db_conn)
 
     # Page functionality
     main()
