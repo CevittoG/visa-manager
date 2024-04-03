@@ -3,6 +3,7 @@ import re
 import supabase
 from helpers import COUNTRIES
 from helpers.database import db_select, db_update, get_user_trips
+from helpers.database import db_select, get_user_trips, db_upsert
 
 DATE_FORMAT = "MM-DD-YYYY"
 TH_DF_CONFIG = {
@@ -103,6 +104,40 @@ def sidebar_user_info(db_conn: supabase.Client):
         st.sidebar.markdown(f"## {st.session_state.SESSION_USER['username']}")
         if st.session_state.SESSION_USER['last_login'] is not None:
             st.sidebar.markdown(f"Last seen on {st.session_state.SESSION_USER['last_login']}")
+
+        # Export streamlit's TravelHistory session_state variable into db
+        if st.sidebar.button('Save changes', type='primary', key='save'):
+            # Current trips as a list of tuples
+            trips_list = st.session_state['TravelHistory'].to_records()
+            if trips_list:
+                # Trip_id related to user
+                trips_ids = db_select(db_conn, 'travel_history_trips', 'trip_id', ('travel_history_id', 'eq', st.session_state.SESSION_USER['th_id']))
+
+                # Create json_data for upsert
+                if trips_ids:
+                    upsert_trips_data = []
+                    for trip_id_dict, trip_info in zip(trips_ids, trips_list):
+                        # Combine dictionary and tuple elements into a new dictionary
+                        trip_info_dict = {**trip_id_dict, **dict(zip(['country', 'entry_date', 'exit_date'], trip_info))}
+                        upsert_trips_data.append(trip_info_dict)
+                else:
+                    upsert_trips_data = [{'country': t[0], 'entry_date': t[1], 'exit_date': t[2]} for t in trips_list]
+
+                upsert_trips = db_upsert(db_conn, 'trips', upsert_trips_data)
+
+                # Check for query error
+                if isinstance(upsert_trips, str):
+                    st.sidebar.error('Unknown error, please refresh the page and try again. If this keeps happening please wait a few minutes, the services might be down.')
+                elif len(upsert_trips) > 0:
+                    upsert_travel_history_trips_data = [{'travel_history_id': st.session_state.SESSION_USER['th_id'], 'trip_id': t['id']} for t in upsert_trips]
+                    upsert_travel_history_trips = db_upsert(db_conn, 'travel_history_trips', upsert_travel_history_trips_data)
+                    # Check for query error
+                    if isinstance(upsert_travel_history_trips, str):
+                        st.sidebar.error('Unknown error, please refresh the page and try again. If this keeps happening please wait a few minutes, the services might be down.')
+                    elif len(upsert_travel_history_trips) > 0:
+                        st.sidebar.success("Data saved")
+            else:
+                st.sidebar.warning('There is no new data to save')
 
 
 def user_login(db_conn, user_id, username, th_id):
