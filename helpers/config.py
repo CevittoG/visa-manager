@@ -1,6 +1,7 @@
 import operator
 import pandas as pd
 from datetime import date, timedelta
+from typing import List, Tuple
 
 SCHENGEN_COUNTRIES = ['Austria', 'Belgium', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Italy', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Malta',
                       'Netherlands', 'Norway', 'Poland', 'Portugal', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland']
@@ -21,7 +22,7 @@ class Trip:
         self.entry_eval_days: int = 0
         self.exit_eval_date: date = None
         self.exit_eval_days: int = 0
-        self.renew_date: date = 0
+        self.renew_date: date = None
         # after validation
         self.valid = True
 
@@ -89,6 +90,31 @@ class TravelHistory:
         self.trips = sorted(self.trips, key=operator.attrgetter('entry_date'))
         self.validation()
 
+    def update_trips(self, edited_trips: pd.DataFrame) -> list:
+        # Check for differences
+        cols_to_compare = ['country', 'entry_date', 'exit_date']
+        current_df = self.to_df()[cols_to_compare]
+        edited_df = edited_trips.loc[:, edited_trips.columns != 'remove'][cols_to_compare]
+        diff_idx = list(current_df.compare(edited_df, result_names=("current", "edited"), keep_equal=True).index)
+
+        changes = []
+
+        # Add edited trips
+        for idx in diff_idx:
+            new_trip = Trip(edited_trips.iloc[idx]['country'], edited_trips.iloc[idx]['entry_date'], edited_trips.iloc[idx]['exit_date'])
+            changes.append((f"{new_trip}", '✏️'))
+            self.add_trip(new_trip)
+
+        # Remove selected trips
+        idx_to_remove = list(edited_trips[edited_trips['remove'] == True].index)
+        idx_to_remove.reverse()
+        for idx in idx_to_remove:
+            changes.append((f"{self.trips[idx]}", '🗑️'))
+            self.trips.pop(idx)
+
+        # list of changes to print
+        return changes
+
     def validation(self):
         val_functions = {'Schengen': self.schengen_validation}
         if self.last_trip.type == 'Other':
@@ -133,30 +159,6 @@ class TravelHistory:
 
         return pd.DataFrame.from_records(records_aux)
 
-    def update_trips(self, edited_trips: pd.DataFrame) -> list:
-        # Check for differences
-        cols_to_compare = ['country', 'entry_date', 'exit_date']
-        current_df = self.to_df()[cols_to_compare]
-        edited_df = edited_trips.loc[:, edited_trips.columns != 'remove'][cols_to_compare]
-        diff_idx = list(current_df.compare(edited_df, result_names=("current", "edited"), keep_equal=True).index)
-
-        changes = []
-
-        # Add edited trips
-        for idx in diff_idx:
-            new_trip = Trip(edited_trips.iloc[idx]['country'], edited_trips.iloc[idx]['entry_date'], edited_trips.iloc[idx]['exit_date'])
-            changes.append((f"{new_trip}", '✏️'))
-            self.add_trip(new_trip)
-
-        # Remove selected trips
-        idx_to_remove = list(edited_trips[edited_trips['remove'] == True].index)
-        idx_to_remove.reverse()
-        for idx in idx_to_remove:
-            changes.append((f"{self.trips[idx]}", '🗑️'))
-            self.trips.pop(idx)
-
-        # list of changes to print
-        return changes
-
-    def db_import(self, user_id):
-        pass
+    def to_records(self) -> List[Tuple]:
+        trips_as_list = [(t.country, t.entry_date.strftime('%Y-%m-%d'), t.exit_date.strftime('%Y-%m-%d')) for t in self.trips]
+        return trips_as_list
