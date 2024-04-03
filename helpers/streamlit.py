@@ -148,7 +148,15 @@ def user_login(db_conn, user_id, username, th_id):
                                         'username': username,
                                         'last_login': db_select(db_conn, 'users', 'last_login', ('id', 'eq', str(user_id)))[0]['last_login'],
                                         'th_id': th_id}
-    # st.session_state['TravelHistory'] =
-    print(get_user_trips(db_conn, th_id))
+
+    db_trips = get_user_trips(db_conn, th_id)
+    if db_trips:
+        st.session_state['TravelHistory'] = TravelHistory()
+        for t in db_trips:
+            c = t['country']
+            en_d = datetime.strptime(t['entry_date'], "%Y-%m-%d").date()
+            ex_d = datetime.strptime(t['exit_date'], "%Y-%m-%d").date()
+            st.session_state['TravelHistory'].add_trip(Trip(c, en_d, ex_d))
+
     # Refresh page
     st.rerun()
