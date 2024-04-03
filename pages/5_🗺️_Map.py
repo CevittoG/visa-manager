@@ -1,5 +1,5 @@
 from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
-from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT, sidebar_user_info
+from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT, sidebar_setup
 from helpers.database import db_init_conn
 from helpers.map import display_map
 import streamlit as st
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     # Initiate database connection
     db_conn = db_init_conn()
     # Sidebar
-    sidebar_user_info(db_conn)
+    sidebar_setup(db_conn)
 
     # Page functionality
     main()

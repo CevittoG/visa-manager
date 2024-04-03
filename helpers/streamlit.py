@@ -1,9 +1,10 @@
 import streamlit as st
 import re
 import supabase
-from helpers import COUNTRIES
-from helpers.database import db_select, db_update, get_user_trips
+from helpers import COUNTRIES, Trip, TravelHistory
 from helpers.database import db_select, get_user_trips, db_upsert
+from typing import Literal
+from datetime import datetime
 
 DATE_FORMAT = "MM-DD-YYYY"
 TH_DF_CONFIG = {
@@ -50,7 +51,7 @@ def add_logo(logo_url: str, height: int = 120):
     )
 
 
-def shared_page_config(title="", image="", initial_sidebar_state="expanded", emoji="", page_caption=None):  # ("auto" or "expanded" or "collapsed")
+def shared_page_config(title="", image="", initial_sidebar_state: Literal["auto", "expanded", "collapsed"] = "expanded", emoji="", page_caption=None):
     # Set up the pages
     st.set_page_config(layout="wide", page_title='VISA Manager - ' + title, page_icon="🗺️", initial_sidebar_state=initial_sidebar_state)
     # Show if debug mode
@@ -78,7 +79,7 @@ def shared_page_config(title="", image="", initial_sidebar_state="expanded", emo
     return
 
 
-def sidebar_user_info(db_conn: supabase.Client):
+def sidebar_setup(db_conn: supabase.Client):
     # Check if users as logged in
     if not st.session_state['LOGGED_IN']:
         if st.secrets['DEBUG']:

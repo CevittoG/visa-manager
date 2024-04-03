@@ -1,5 +1,5 @@
 import streamlit as st
-from helpers.streamlit import shared_page_config, sidebar_user_info, user_login
+from helpers.streamlit import shared_page_config, sidebar_setup, user_login
 from helpers.database import db_init_conn, user_sing_up
 from helpers import TravelHistory
 import os
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # Initiate database connection
     db_conn = db_init_conn()
     # Sidebar
-    sidebar_user_info(db_conn)
+    sidebar_setup(db_conn)
 
     # Page functionality
     main()
