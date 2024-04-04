@@ -43,7 +43,7 @@ def main():
                 if isinstance(new_user, str):
                     st.error(new_user)
                 else:
-                    user_login(*new_user)
+                    user_login(db_conn, *new_user)
             st.write('')
             st.write('')
             remember_me = st.checkbox("Remember me", disabled=not user_agree)
