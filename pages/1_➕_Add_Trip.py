@@ -34,7 +34,7 @@ if __name__ == "__main__":
     PAGE_EMOJI, PAGE_KEYWORD = page_recognition(os.path.basename(__file__))
 
     # Start with page content
-    page_caption = ("On this page you can add trips to your travel history. It will only be necessary to select country and dates, the app will do the rest...")
+    page_caption = ("Planning your next adventure, whether it's a relaxing beach escape or a thrilling mountain trek? Add your trip details here, and our visa validation wizard will check if your tourist visa allows the activities you have planned. No more visa confusion – we'll help you avoid any unwanted surprises at immigration!")
     shared_page_config(title=PAGE_KEYWORD.replace('_', ' ').title(),
                        emoji=PAGE_EMOJI,
                        page_caption=page_caption, )

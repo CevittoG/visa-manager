@@ -38,7 +38,7 @@ if __name__ == "__main__":
     PAGE_EMOJI, PAGE_KEYWORD = page_recognition(os.path.basename(__file__))
 
     # Start with page content
-    page_caption = ("Missing description...")  # ToDo: Missing description
+    page_caption = (" Feeling like a seasoned explorer? Unleash your inner Marco Polo and visualize your travel conquests on a dazzling world map! See all your past and upcoming trips neatly pinned, transforming your wanderlust into a visual masterpiece.  This isn't just a map – it's your travel brag board, ready to inspire wanderlust in everyone who sees it.")
     shared_page_config(title=PAGE_KEYWORD.replace('_', ' ').title(),
                        emoji=PAGE_EMOJI,
                        page_caption=page_caption,

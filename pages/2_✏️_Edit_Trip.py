@@ -29,8 +29,7 @@ if __name__ == "__main__":
     PAGE_EMOJI, PAGE_KEYWORD = page_recognition(os.path.basename(__file__))
 
     # Start with page content
-    page_caption = (" On this page you can edit records from your travel history. It will only be necessary to select the cell you want to edit in the following table, and then complete a new value. If you wish to remove"
-                    "a trip, just select the last column ('Remove') and then save your changes.")
+    page_caption = ("Travel plans are rarely set in stone, especially for the adventurous soul! Did you discover a hidden gem that deserves an extra day of exploration? No worries! Edit your trip details here with ease, whether it's a last-minute location change, extended stay, or a spontaneous detour to chase a local festival.")
     shared_page_config(title=PAGE_KEYWORD.replace('_', ' ').title(),
                        emoji=PAGE_EMOJI,
                        page_caption=page_caption, )
