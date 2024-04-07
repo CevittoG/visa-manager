@@ -67,3 +67,13 @@ def highlight_missing_values(value, bgcolor="#f9aeae", color="black"):
         return f'background-color: {bgcolor}; color: {color};'
     else:
         return ""
+
+
+def ordinal(n: int, sup=True) -> str:
+    if 11 <= (n % 100) <= 13:
+        suffix = 'th'
+    else:
+        suffix = ['th', 'st', 'nd', 'rd', 'th'][min(n % 10, 4)]
+
+    ordinal_str = suffix if not sup else f'<sup>{suffix}</sup>'
+    return ordinal_str

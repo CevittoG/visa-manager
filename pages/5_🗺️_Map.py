@@ -2,6 +2,7 @@ from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
 from helpers.streamlit import page_recognition, shared_page_config, TH_DF_CONFIG, DATE_FORMAT, sidebar_setup
 from helpers.database import db_init_conn
 from helpers.map import display_map
+from helpers.visual import ordinal
 import streamlit as st
 import os
 
@@ -16,10 +17,12 @@ def main():
         clicked_country = display_map(trips_df[columns_to_show])
         if clicked_country != '':
             st.markdown(f'## {clicked_country}')
-            # ToDo: Show trips data
             for idx, row in trips_df.loc[trips_df['country'] == clicked_country].iterrows():
                 if not row.empty:
-                    st.markdown(f"### #{idx}\n\n{row['entry_date']} to {row['exit_date']} - {row['days']} days")
+                    st.markdown(f"* #### {idx}{ordinal(idx)} Trip", unsafe_allow_html=True)
+                    st.text(f"\t{'From:':10s}{row['entry_date']}")
+                    st.text(f"\t{'To:':10s}{row['exit_date']}")
+                    st.text(f"\t{'Days:':10s}{row['days']}")
     else:
         st.warning('There is no data to export. Click one of the following buttons to add data.')
         st.page_link("pages/1_➕_Add_Trip.py", label="Add Trip", icon="➕")
