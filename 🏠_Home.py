@@ -4,7 +4,23 @@ from helpers.database import db_init_conn, user_sing_up
 from helpers import TravelHistory
 import os
 
+MAIN_DESC = """
+Dreaming of exotic adventures but worried about visa restrictions? This app is your all-in-one travel companion, designed to make exploring the world smoother than ever.  Here's how it helps:
 
+* #### Plan and Conquer:
+Planning your next adventure? Add your destination and activities – our visa validation tool will check if your tourist visa allows them, avoiding any unwanted surprises at immigration!
+
+* #### Stay Flexible:
+Travel plans change! Edit your trip details with ease, whether it's a last-minute location switch, extending your stay, or following a spontaneous detour.
+
+* #### Become a Power Traveler:
+Got a long travel itinerary? Ditch the manual entry! Upload a file with all your adventures, and our app will validate your visas for each stop in a flash.
+
+* #### Offline Access, No Worries:
+Don't let unreliable Wi-Fi hold you back! Download your entire travel history as a file for offline access. Now you can see all your trip info anytime, anywhere.
+
+* #### Explore Visually:
+Feeling like a seasoned explorer? See all your past and upcoming trips pinned on a beautiful world map, transforming your wanderlust into a visual masterpiece. It's your brag board of amazing destinations, ready to inspire wanderlust in everyone!"""
 SCHENGEN_DESC = """
 ## Schengen Tourist Visa
 [The Schengen area](https://www.schengenvisainfo.com/schengen-visa-countries-list/) represents a border-free zone 
@@ -31,6 +47,7 @@ def main():
     usa_tab.write(USA_DESC)
 
     with main_tab:
+
         if not st.session_state['LOGGED_IN']:
             st.markdown("## Sing-up")
             user_agree = st.checkbox("By checking this box, you agree to assume all responsibility for the content you create and share within the app.")
@@ -53,6 +70,8 @@ def main():
                 st.info("I'm sorry! I haven't implemented sessions yet.")
         else:
             st.markdown(f"## Welcome {st.session_state.SESSION_USER['username']}!")
+
+        st.write(MAIN_DESC)
 
 
 if __name__ == "__main__":
