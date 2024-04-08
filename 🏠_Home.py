@@ -37,8 +37,18 @@ seems a very simple rule, but it’s often misunderstood, and many people overst
 penalties. This is why it’s important to know how exactly the 90/180-day rule works. 
 [*www.schengenvisainfo.com*](https://www.schengenvisainfo.com/visa-calculator/)"""
 USA_DESC = """
-## Visa Waiver USA
-something..."""
+## ESTA Visa Waiver USA
+The [Visa Waiver Program (VWP)](https://www.usa.gov/visa-waiver-esta) allows citizens of participating countries to travel to the U.S. for business or pleasure for stays of up to 90 days per visit. This flexibility lets you plan your dream itinerary!
+
+Here's an example: Imagine you're participating on the VWP planning a trip to the U.S. The 90-day limit per visit gives you the option to:
+
+* Double the Adventure: Take two separate 90-day trips across the year, exploring different regions or coasts.
+* Multiple Mini-Escapes: Plan shorter, more frequent trips – maybe 9 visits of 20 days each, spread throughout the year.
+**Remember, these are just examples!** The VWP allows for a maximum total stay of 180 days within a one-year period.
+
+**Important Note**: While our app can help you explore potential itineraries, it's crucial to  verify your specific eligibility and any limitations with the official  U.S. Department of State website or your local U.S. Embassy/Consulate.
+
+[Complete your ESTA application online](https://esta.cbp.dhs.gov/)"""
 
 
 def main():
