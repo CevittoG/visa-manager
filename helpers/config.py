@@ -32,7 +32,7 @@ class Trip:
     def get_type(self):
         if self.country in SCHENGEN_COUNTRIES:
             trip_type = 'Schengen'
-        elif self.country == 'United States':
+        elif self.country == 'United States of America':
             trip_type = 'ESTA'
         else:
             trip_type = 'Other'
@@ -147,7 +147,7 @@ class TravelHistory:
 
     def us_validation(self):
         # Selection of schengen trips
-        us_trips = [t for t in self.trips if t.country == 'United States']
+        us_trips = [t for t in self.trips if t.country == 'United States of America']
         for trip in us_trips:
             # Evaluation Visa Dates (January 1st)
             first_day_of_year = date(trip.entry_date.year, 1, 1)

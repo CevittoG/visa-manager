@@ -1,4 +1,4 @@
-from helpers import COUNTRIES, TravelHistory, Trip
+from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
 from helpers.streamlit import page_recognition, shared_page_config, sidebar_setup, TH_DF_CONFIG, DATE_FORMAT
 from helpers.visual import highlight_invalid_trip
 from helpers.database import db_init_conn
