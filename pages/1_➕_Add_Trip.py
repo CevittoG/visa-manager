@@ -1,4 +1,4 @@
-from helpers import COUNTRIES, TravelHistory, Trip, SCHENGEN_COUNTRIES
+from helpers import COUNTRIES, TravelHistory, Trip
 from helpers.streamlit import page_recognition, shared_page_config, sidebar_setup, TH_DF_CONFIG, DATE_FORMAT
 from helpers.visual import highlight_invalid_trip
 from helpers.database import db_init_conn
@@ -10,7 +10,7 @@ import os
 def main():
     c1, c2, c3, c4 = st.columns([2, 1, 1, 1])
 
-    country = c1.selectbox('Country', SCHENGEN_COUNTRIES)
+    country = c1.selectbox('Country', COUNTRIES)
     entry_date = c2.date_input('Entry date', format=DATE_FORMAT)
     exit_date = c3.date_input('Exit date', format=DATE_FORMAT)
     c4.text("")

@@ -30,7 +30,12 @@ class Trip:
         return f"{self.country.title()} ({self.entry_date.strftime('%m-%d-%Y')} to {self.exit_date.strftime('%m-%d-%Y')})"
 
     def get_type(self):
-        trip_type = 'Schengen' if self.country in SCHENGEN_COUNTRIES else 'Other'
+        if self.country in SCHENGEN_COUNTRIES:
+            trip_type = 'Schengen'
+        elif self.country == 'United States':
+            trip_type = 'ESTA'
+        else:
+            trip_type = 'Other'
         return trip_type
 
     def get_duration(self):
@@ -70,8 +75,8 @@ class Trip:
         else:
             pass
 
-    def update_days_count(self):
-        self.days_left = 90 - self.exit_eval_days
+    def update_days_count(self, max_trip_days: int = 90):
+        self.days_left = max_trip_days - self.exit_eval_days
         self.limit_date = self.exit_date + timedelta(days=self.days_left)
         self.renew_date = self.entry_date + timedelta(days=180)
 
@@ -116,7 +121,7 @@ class TravelHistory:
         return changes
 
     def validation(self):
-        val_functions = {'Schengen': self.schengen_validation}
+        val_functions = {'Schengen': self.schengen_validation, 'ESTA': self.us_validation}
         if self.last_trip.type == 'Other':
             pass
         else:
@@ -138,6 +143,27 @@ class TravelHistory:
                 trip.update_days_count()
             # Validate trip
             is_valid = (trip.days <= 30) & (trip.days_left >= 0) & (trip.entry_eval_days <= 90) & (trip.exit_eval_days <= 90)
+            trip.validate(is_valid)
+
+    def us_validation(self):
+        # Selection of schengen trips
+        us_trips = [t for t in self.trips if t.country == 'United States']
+        for trip in us_trips:
+            # Evaluation Visa Dates (January 1st)
+            first_day_of_year = date(trip.entry_date.year, 1, 1)
+            j1_delta = trip.entry_date - first_day_of_year
+            trip.get_entry_eval_date(j1_delta.days)
+            j1_delta = trip.exit_date - first_day_of_year
+            trip.get_exit_eval_date(j1_delta.days)
+            # Compare with other Schengen trips
+            if len(us_trips) > 0:
+                # Days in Schengen zone before eval dates
+                trip.get_entry_eval_days(us_trips)
+                trip.get_exit_eval_days(us_trips)
+                # Other
+                trip.update_days_count()
+            # Validate trip
+            is_valid = (trip.days <= 90) & (trip.days_left >= 0) & (trip.entry_eval_days <= 180) & (trip.exit_eval_days <= 180)
             trip.validate(is_valid)
 
     def to_df(self) -> pd.DataFrame:
