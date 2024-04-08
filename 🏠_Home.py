@@ -5,6 +5,7 @@ from helpers import TravelHistory
 import os
 
 MAIN_DESC = """
+## App Features
 Dreaming of exotic adventures but worried about visa restrictions? This app is your all-in-one travel companion, designed to make exploring the world smoother than ever.  Here's how it helps:
 
 * #### Plan and Conquer:
@@ -50,6 +51,7 @@ def main():
 
         if not st.session_state['LOGGED_IN']:
             st.markdown("## Sing-up")
+            st.markdown("Creating an account is optional, but it lets you save your meticulously planned itineraries. That means next time you're ready to conquer the world, you can pick up right where you left off, skipping the hassle of re-entering all those details. More time exploring, less time planning")
             user_agree = st.checkbox("By checking this box, you agree to assume all responsibility for the content you create and share within the app.")
             c1, c2, c3 = st.columns([2, 2, 1])
 
